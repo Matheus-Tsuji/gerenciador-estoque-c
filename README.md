@@ -28,7 +28,7 @@ Um sistema completo, leve e intuitivo de **Gerenciador de Estoque** desenvolvido
 
 ## 🎯 Visão Geral
 
-O projeto resolve o problema clássico de controle de estoque de produtos em um comércio ou empresa, oferecendo operações completas de entrada, listagem, busca e consolidação financeira de patrimônio em estoque. 
+O projeto resolve o problema clássico de controle de estoque de produtos em um comércio ou empresa, oferecendo operações completas de entrada, listagem, busca, ajuste dinâmico de quantidades e consolidação financeira de patrimônio em estoque. 
 
 Todo o fluxo é guiado por um **menu interativo no console**, com feedback visual colorido para indicar sucessos, avisos ou erros.
 
@@ -42,6 +42,7 @@ Todo o fluxo é guiado por um **menu interativo no console**, com feedback visua
 | **`[2]`** | **Listar Produtos** | Exibe todos os itens cadastrados de forma organizada e limpa na tela. |
 | **`[3]`** | **Buscar Produto** | Localiza rapidamente os dados de um item a partir do seu código único. |
 | **`[4]`** | **Calcular Valor de Estoque** | Itera por todos os registros e calcula o valor total acumulado do estoque (`quantidade × preço`). |
+| **`[5]`** | **Atualizar Estoque** | Permite ajustar a quantidade em estoque de um produto existente (adicionando ou subtraindo unidades). |
 | **`[0]`** | **Sair** | Encerra a aplicação com segurança. |
 
 ---
@@ -56,8 +57,8 @@ codigo;nome;categoria;quantidade;preco
 
 **Exemplo real armazenado:**
 ```text
-101;Mouse;Periferico;14;130.869995
-102;Teclado;Periferico;7;205.990005
+101;Mouse;Periferico;13;130.869995
+102;Teclado;Periferico;12;205.990005
 103;Microfone;Eletronico;10;368.989990
 ```
 
@@ -130,6 +131,7 @@ gerenciador-estoque-c/
 
 ## 🛠️ Destaques Técnicos do Código
 
+- **Atualização Segura de Dados com Arquivo Temporário**: A função `atualizarEstoque` utiliza o padrão seguro de leitura e reescrita através de `temporario.txt`, substituindo o original atomicamente com `remove()` e `rename()`, prevenindo corrupção de dados.
 - **Tratamento de Buffers de Entrada**: Evita o clássico problema de pulo de leituras em C limpando o buffer com loops `while (getchar() != '\n')` e `getchar()` após o uso de `scanf`.
 - **Sanitização de Strings com `strcspn`**: Substitui o caractere de quebra de linha (`\n`) capturado pelo `fgets` por `\0`, garantindo que nomes e categorias fiquem limpos na gravação e na exibição.
 - **Leitura Formatada com Expressões de Conjunto no `fscanf`**:

@@ -168,6 +168,77 @@ void valorTotal()
     printf("\nValor total do estoque: " VERDE "R$ %.2f" RESET "\n", total);
 }
 
+// Funcao para atualizar a quantidade em estoque (adicionar ou subtrair unidades)
+void atualizarEstoque()
+{
+    // Abertura do arquivo original para leitura e criacao de um temporario para gravacao
+    FILE *arquivo = fopen(ARQ_TXT, "r");
+    FILE *temporario = fopen("temporario.txt", "w");
+    struct Produto p;
+    int codigoPesquisa, ajusteQtd, opcao;
+    int encontrado = 0;
+
+    // Verifica se os arquivos foram abertos corretamente
+    if (arquivo == NULL || temporario == NULL)
+    {
+        printf("\n" AMARELO "[AVISO]" RESET " Erro ao abrir arquivo ou nenhum produto cadastrado.\n");
+        return;
+    }
+
+    // Leitura do codigo do produto a ser modificado
+    printf("\nDigite o codigo do produto: ");
+    scanf("%d", &codigoPesquisa);
+
+    // Selecao da operacao: adicao ou subtracao
+    printf("\nDeseja " CIANO "[1]" RESET BOLD " adicionar" RESET " ou " CIANO "[2]" RESET BOLD " subtrair? " RESET);
+    printf("\nDigite a opcao que deseja: ");
+    scanf("%d", &opcao);
+
+    // Percorre todos os produtos atualizando a quantidade do item desejado
+    while (fscanf(arquivo, "%d;%49[^;];%24[^;];%d;%f\n", &p.codigo, p.nome, p.categoria, &p.quantidade, &p.preco) == 5)
+    {
+        if (p.codigo == codigoPesquisa)
+        {
+            encontrado = 1;
+            printf(BOLD"\n----- ATUALIZANDO ESTOQUE -----\n"RESET);
+            printf("\nQuantidade atual: %d\n", p.quantidade);
+            if (opcao == 1)
+            {
+                printf("\nQuantidade a adicionar: ");
+                scanf("%d", &ajusteQtd);
+                p.quantidade += ajusteQtd;
+            }
+            else
+            {
+                printf("\nQuantidade a subtrair: ");
+                scanf("%d", &ajusteQtd);
+                p.quantidade -= ajusteQtd;
+            }
+        }
+
+        // Grava o registro (atualizado ou original) no arquivo temporario
+        fprintf(temporario, "%d;%s;%s;%d;%f\n", p.codigo, p.nome, p.categoria, p.quantidade, p.preco);
+    }
+
+    // Fecha os arquivos antes de substituir
+    fclose(arquivo);
+    fclose(temporario);
+
+    // Substitui o arquivo original pelo temporario atualizado
+    remove(ARQ_TXT);
+    rename("temporario.txt", ARQ_TXT);
+
+    // Mensagem de retorno sobre o resultado da operacao
+    if (encontrado)
+    {
+        printf("\n" VERDE "[SUCESSO]" RESET " Estoque atualizado com sucesso!\n");
+    }
+    else
+    {
+        printf("\n" AMARELO "[AVISO]" RESET " Produto nao encontrado.\n");
+    }
+}
+
 // Exibicao do menu interativo e controle das opcoes
 void menu()
 {
@@ -181,6 +252,7 @@ void menu()
         printf("\n" CIANO "[2]" RESET " Listar Produtos");
         printf("\n" CIANO "[3]" RESET " Buscar Produto");
         printf("\n" CIANO "[4]" RESET " Calcular Valor de Estoque");
+        printf("\n" CIANO "[5]" RESET " Atualizar Estoque");
         printf("\n" VERMELHO "[0]" RESET " Sair");
 
         printf("\n\n>>> Digite a opcao: ");
@@ -200,6 +272,9 @@ void menu()
                 break;
             case 4:
                 valorTotal();
+                break;
+            case 5:
+                atualizarEstoque();
                 break;
             case 0:
                 printf(CIANO "\n\nSaindo do sistema...\n\n" RESET);
