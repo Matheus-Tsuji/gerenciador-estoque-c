@@ -1,9 +1,12 @@
-﻿# Binários e objetos de compilação
+﻿# Objetos e pastas de build
 bin/
 obj/
-*.exe
 *.o
 
-# Arquivos de ambiente do Code::Blocks
+# Arquivos temporários e de configuração do Code::Blocks
 *.layout
 *.depend
+
+# Ignorar outros executáveis genéricos, exceto o principal da aplicação
+*.exe
+!gerenciador_estoque.exe
