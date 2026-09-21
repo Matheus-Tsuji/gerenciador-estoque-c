@@ -5,6 +5,9 @@
   <img src="https://img.shields.io/badge/Plataforma-Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Windows" />
   <img src="https://img.shields.io/badge/IDE-Code%3A%3ABlocks-2A7B9B?style=for-the-badge" alt="CodeBlocks" />
   <img src="https://img.shields.io/badge/Status-Conclu%C3%ADdo-brightgreen?style=for-the-badge" alt="Status" />
+  <a href="https://github.com/Matheus-Tsuji/gerenciador-estoque-c/raw/main/gerenciador_estoque.exe">
+    <img src="https://img.shields.io/badge/Download-Execut%C3%A1vel%20.EXE-success?style=for-the-badge&logo=windows" alt="Download Executável" />
+  </a>
 </p>
 
 Um sistema completo, leve e intuitivo de **Gerenciador de Estoque** desenvolvido em **Linguagem C**. Criado para rodar direto no terminal com formatação rica via códigos de escape ANSI (cores vibrantes e destaques visuais), além de persistência de dados em arquivo de texto formatado (`produtos.txt`).
@@ -16,11 +19,12 @@ Um sistema completo, leve e intuitivo de **Gerenciador de Estoque** desenvolvido
 - [Visão Geral](#-visão-geral)
 - [Funcionalidades](#-funcionalidades)
 - [Estrutura dos Dados](#-estrutura-dos-dados)
-- [Como Executar na sua Máquina](#-como-executar-na-sua-máquina)
-  - [Opção 1: Executar Direto (Sem compilar nada)](#1-executar-direto-sem-compilar-nada)
+- [Como Baixar e Executar na sua Máquina](#-como-baixar-e-executar-na-sua-máquina)
+  - [Opção 1: Download Direto do Executável (Pronto para Usar)](#1-download-direto-do-executável-pronto-para-usar)
   - [Opção 2: Compilar do Zero via Terminal (GCC)](#2-compilar-do-zero-via-terminal-gcc)
   - [Opção 3: Abrir e Compilar pelo Code::Blocks](#3-abrir-e-compilar-pelo-codeblocks)
 - [Estrutura do Repositório](#-estrutura-do-repositório)
+- [Automação e Compilação no GitHub (CI/CD)](#-automação-e-compilação-no-github-cicd)
 - [Destaques Técnicos do Código](#-destaques-técnicos-do-código)
 - [Autor](#-autor)
 
@@ -66,23 +70,19 @@ codigo;nome;categoria;quantidade;preco
 
 ---
 
-## 🚀 Como Executar na sua Máquina
+## 🚀 Como Baixar e Executar na sua Máquina
 
-Você pode rodar este projeto de três maneiras bem simples:
+### 1. Download Direto do Executável (Pronto para Usar)
+Não precisa ter compilador nem Code::Blocks instalado para rodar!
 
-### 1. Executar Direto (Sem compilar nada)
-O repositório já inclui o executável pronto para Windows: **`gerenciador_estoque.exe`**.
+👉 **[Clique aqui para baixar o gerenciador_estoque.exe](https://github.com/Matheus-Tsuji/gerenciador-estoque-c/raw/main/gerenciador_estoque.exe)**
 
-1. Clone ou baixe este repositório:
-   ```bash
-   git clone https://github.com/Matheus-Tsuji/gerenciador-estoque-c.git
-   cd gerenciador-estoque-c
-   ```
-2. Execute no PowerShell ou Prompt de Comando (CMD):
+1. Baixe o arquivo `gerenciador_estoque.exe`;
+2. Coloque-o em uma pasta (junto ou não com o seu `produtos.txt`);
+3. Dê **duplo clique** no executável ou abra pelo terminal:
    ```powershell
    .\gerenciador_estoque.exe
    ```
-   *(Ou se preferir, basta dar um duplo clique no arquivo `gerenciador_estoque.exe` pelo Explorador de Arquivos do Windows).*
 
 ---
 
@@ -115,10 +115,21 @@ Se você utiliza a IDE **Code::Blocks**:
 
 ---
 
+## 🤖 Automação e Compilação no GitHub (CI/CD)
+
+O repositório conta com **GitHub Actions** configurado em [`.github/workflows/build.yml`](.github/workflows/build.yml):
+- A cada `push` ou lançamento de versão, o GitHub compila o código-fonte automaticamente em um ambiente Windows limpo com GCC.
+- O executável recém-gerado fica disponível para download direto na aba **Actions** e na seção **Releases** do repositório.
+
+---
+
 ## 📂 Estrutura do Repositório
 
 ```text
 gerenciador-estoque-c/
+├── .github/
+│   └── workflows/
+│       └── build.yml       # Automação de compilação contínua (CI/CD) no GitHub
 ├── .gitignore              # Configuração de arquivos ignorados pelo Git
 ├── README.md               # Documentação completa do projeto
 ├── gerenciador_estoque.exe # Executável pronto para uso no Windows
