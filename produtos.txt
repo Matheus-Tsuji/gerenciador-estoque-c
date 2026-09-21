@@ -1,0 +1,3 @@
+101;Mouse;Periferico;14;130.869995
+102;Teclado;Periferico;7;205.990005
+103;Microfone;Eletronico;10;368.989990

@@ -1,0 +1,9 @@
+﻿# Binários e objetos de compilação
+bin/
+obj/
+*.exe
+*.o
+
+# Arquivos de ambiente do Code::Blocks
+*.layout
+*.depend
