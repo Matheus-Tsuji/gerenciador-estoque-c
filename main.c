@@ -1,15 +1,18 @@
-#include <stdio.h>
+ï»¿#include <stdio.h>
 #include <string.h>
 
+// Nome do arquivo para persistencia dos dados
 #define ARQ_TXT "produtos.txt"
 
+// Cores e formatacao para o terminal (ANSI)
 #define VERMELHO "\033[31m"
 #define VERDE    "\033[32m"
 #define RESET    "\033[0m"
 #define CIANO    "\033[36m"
 #define AMARELO  "\033[33m"
-#define BOLD    "\033[1m"
+#define BOLD     "\033[1m"
 
+// Estrutura que representa um produto no estoque
 struct Produto
 {
     int codigo;
@@ -19,6 +22,7 @@ struct Produto
     float preco;
 };
 
+// Cadastra um novo produto e salva no final do arquivo
 void cadastrarProduto()
 {
     FILE *arquivo = fopen(ARQ_TXT, "a");
@@ -30,20 +34,20 @@ void cadastrarProduto()
         return;
     }
 
-    // Cadastro de informações
+    // Coleta dos dados do produto
     printf(BOLD"\n----- CADASTRO DE PRODUTO -----\n"RESET);
 
     printf("Codigo: ");
     scanf("%d", &p.codigo);
-    while (getchar() != '\n');
+    while (getchar() != '\n'); // Limpa o buffer do teclado
 
     printf("Nome: ");
     fgets(p.nome, sizeof(p.nome), stdin);
-    p.nome[strcspn(p.nome, "\n")] = '\0';
+    p.nome[strcspn(p.nome, "\n")] = '\0'; // Remove o \n capturado pelo fgets
 
     printf("Categoria: ");
     fgets(p.categoria, sizeof(p.categoria), stdin);
-    p.categoria[strcspn(p.categoria, "\n")] = '\0';
+    p.categoria[strcspn(p.categoria, "\n")] = '\0'; // Remove o \n capturado pelo fgets
 
     printf("Quantidade: ");
     scanf("%d", &p.quantidade);
@@ -51,15 +55,16 @@ void cadastrarProduto()
     printf("Preco: ");
     scanf("%f", &p.preco);
 
-    getchar();
+    getchar(); // Consome o \n residual do scanf
 
-    // Registro no arquivo
+    // Grava os dados separados por ponto e virgula
     fprintf(arquivo, "%d;%s;%s;%d;%f\n", p.codigo, p.nome, p.categoria, p.quantidade, p.preco);
 
     fclose(arquivo);
     printf("\n" VERDE "[SUCESSO]" RESET " Produto cadastrado com sucesso!\n");
 }
 
+// Lista todos os produtos cadastrados no arquivo
 void listarProdutos()
 {
     FILE *arquivo = fopen(ARQ_TXT, "r");
@@ -73,6 +78,7 @@ void listarProdutos()
 
     printf(BOLD"\n----- LISTA DE PRODUTOS -----\n"RESET);
 
+    // Le cada linha do arquivo ate o fim
     while (fscanf(arquivo, "%d;%49[^;];%24[^;];%d;%f\n", &p.codigo, p.nome, p.categoria, &p.quantidade, &p.preco) == 5)
     {
         printf("\nCodigo: %d", p.codigo);
@@ -86,6 +92,7 @@ void listarProdutos()
     fclose(arquivo);
 }
 
+// Busca um produto especifico pelo codigo
 void buscarProduto()
 {
     FILE *arquivo = fopen(ARQ_TXT, "r");
@@ -103,6 +110,8 @@ void buscarProduto()
     scanf("%d", &codigoPesquisa);
 
     printf(BOLD"\n----- PRODUTO -----\n"RESET);
+
+    // Percorre os registros buscando o codigo informado
     while (fscanf(arquivo, "%d;%49[^;];%24[^;];%d;%f\n", &p.codigo, p.nome, p.categoria, &p.quantidade, &p.preco) == 5)
     {
         if (p.codigo == codigoPesquisa)
@@ -125,6 +134,7 @@ void buscarProduto()
     fclose(arquivo);
 }
 
+// Calcula e exibe o valor total acumulado do estoque
 void valorTotal()
 {
     float total = 0.0f;
@@ -138,6 +148,8 @@ void valorTotal()
     }
 
     printf(BOLD"\n----- VALOR TOTAL DE ESTOQUE -----\n"RESET);
+
+    // Soma a multiplicacao de quantidade por preco de cada item
     while (fscanf(arquivo, "%d;%49[^;];%24[^;];%d;%f\n", &p.codigo, p.nome, p.categoria, &p.quantidade, &p.preco) == 5)
     {
         total += (p.quantidade * p.preco);
@@ -147,8 +159,10 @@ void valorTotal()
     printf("\nValor total do estoque: " VERDE "R$ %.2f" RESET "\n", total);
 }
 
+// Atualiza a quantidade em estoque (adicionando ou subtraindo)
 void atualizarEstoque()
 {
+    // Abre o arquivo atual para leitura e um temporario para escrita
     FILE *arquivo = fopen(ARQ_TXT, "r");
     FILE *temporario = fopen("temporario.txt", "w");
     struct Produto p;
@@ -168,6 +182,7 @@ void atualizarEstoque()
     printf("\nDigite a opcao que deseja: ");
     scanf("%d", &opcao);
 
+    // Copia os dados para o temporario, alterando apenas o produto pesquisado
     while (fscanf(arquivo, "%d;%49[^;];%24[^;];%d;%f\n", &p.codigo, p.nome, p.categoria, &p.quantidade, &p.preco) == 5)
     {
         if (p.codigo == codigoPesquisa)
@@ -189,12 +204,14 @@ void atualizarEstoque()
             }
         }
 
+        // Salva o registro no arquivo temporario
         fprintf(temporario, "%d;%s;%s;%d;%f\n", p.codigo, p.nome, p.categoria, p.quantidade, p.preco);
     }
 
     fclose(arquivo);
     fclose(temporario);
 
+    // Substitui o arquivo original pelo temporario atualizado
     remove(ARQ_TXT);
     rename("temporario.txt", ARQ_TXT);
 
@@ -208,6 +225,7 @@ void atualizarEstoque()
     }
 }
 
+// Menu principal com o loop de operacoes
 void menu()
 {
     int opcao;
@@ -252,6 +270,7 @@ void menu()
     } while (opcao != 0);
 }
 
+// Funcao principal
 int main(void)
 {
     menu();
